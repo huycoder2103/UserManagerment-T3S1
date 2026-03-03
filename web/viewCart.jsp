@@ -14,7 +14,7 @@
         <title>View Cart Page</title>
     </head>
     <body>
-        <h1>Yuor shopping cart !!</h1>
+        <h1>My shopping cart !!</h1>
         <%
             Cart cart = (Cart) session.getAttribute("CART");
             if (cart != null && cart.getCart().size() > 0) {
@@ -29,6 +29,7 @@
                     <th>Quantity</th>
                     <th>Total</th>
                     <th>Edit</th>
+                    <th>Remove</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,6 +54,7 @@
                     <td>
                         <input type="submit" name="action" value="Edit"/>
                     </td>
+                    <td><input type="submit" name="action" value="Remove"/></td>
                 </tr>
             </form>
             <%
