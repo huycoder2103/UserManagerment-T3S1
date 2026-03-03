@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package sample.controllers;
+package fa26.t3s2.controllers;
 
+import fa26.t3s2.shopping.Cart;
+import fa26.t3s2.shopping.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,56 +14,39 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import sample.user.UserDAO;
-import sample.user.UserDTO;
 
 /**
  *
- * @author ADMIN
+ * @author hoadoan
  */
-@WebServlet(name = "LoginController",
-        urlPatterns = {"/LoginController"})
-public class LoginController extends HttpServlet {
+@WebServlet(name = "EditController", urlPatterns = {"/EditController"})
+public class EditController extends HttpServlet {
 
-    private static final String ERROR = "login.jsp";
-    private static final String ADMIN_PAGE = "admin.jsp";
-    private static final String USER_PAGE = "user.jsp";
-    private static final String AD = "AD";
-    private static final String US = "US";
-    private static final String INCORRECT_MESSAGE = "Incorrect userID or password";
-    private static final String NOT_SUPPORT_MESSAGE = "Your role is not support!";
+    private static final String ERROR = "viewCart.jsp";
+    private static final String SUCCESS = "viewCart.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String userID = request.getParameter("userID");
-            String password = request.getParameter("password");
+            String id = request.getParameter("id");
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-            UserDAO dao = new UserDAO();
-            UserDTO loginUser = dao.checkLogin(userID, password);
+            HttpSession session = request.getSession();
+            Cart cart = (Cart) session.getAttribute("CART");
+            if (cart != null) {
 
-            // Xac thuc o day (Authentication)
-            if (loginUser != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("LOGIN_USER", loginUser);
+                boolean check = cart.edit(id, quantity);
+                if (check) {
+                    url = SUCCESS;
+                    session.setAttribute("CART", cart);
 
-                // Phan quyen o day (Authorization)
-                String roleID = loginUser.getRoleID();
-                if (AD.equals(roleID)) {
-                    url = ADMIN_PAGE;
-                } else if (US.equals(roleID)) {
-                    url = USER_PAGE;
-                } else {
-                    request.setAttribute("ERROR_MESSAGE", NOT_SUPPORT_MESSAGE);
                 }
-            } else {
-                request.setAttribute("ERROR_MESSAGE", INCORRECT_MESSAGE);
             }
+
         } catch (Exception e) {
-            log("Error at LoginController:" + e.toString());
+            log("Error at AddController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
@@ -73,14 +58,12 @@ public class LoginController extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     *
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -89,14 +72,12 @@ public class LoginController extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     *
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 

@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package sample.controllers;
+package fa26.t3s2.controllers;
 
-import fa26.Cart;
-import fa26.Product;
+import fa26.t3s2.shopping.Cart;
+import fa26.t3s2.shopping.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -17,40 +17,38 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author jayke
+ * @author hoadoan
  */
 @WebServlet(name = "AddController", urlPatterns = {"/AddController"})
 public class AddController extends HttpServlet {
 
-   private static final String ERROR="login.jsp";
-   private static final String SUCCESS="shopping.jsp";
-   
+    private static final String ERROR="shopping.jsp";
+    private static final String SUCCESS="shopping.jsp";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url=ERROR;
+        String url= ERROR;
         try {
-           String strProduct=request.getParameter("product");
-           String[] arrProduc=strProduct.split("-");
-           String id= arrProduc[0];
-           String name=arrProduc[1];
-           double price =Double.parseDouble(arrProduc[2]) ;
-            HttpSession session=request.getSession();
-            Cart cart=(Cart) request.getAttribute("CART");
-            if(cart==null){
-                cart=new Cart();
-                
+            String strProduct= request.getParameter("product");
+            String[] arrProduct= strProduct.split("-");
+            String id= arrProduct[0];
+            String name= arrProduct[1];
+            double price= Double.parseDouble(arrProduct[2]);
+            HttpSession session= request.getSession();
+            Cart cart= (Cart) session.getAttribute("CART");
+            if(cart== null){
+                cart= new Cart();
             }
-            Product product = new Product(id, name, price, 1);
-            boolean check = cart.add(product);
+            Product product= new Product(id, name, price, 1);
+            boolean check= cart.add(product);
             if(check){
-                url=SUCCESS;
+                url= SUCCESS;
                 session.setAttribute("CART", cart);
-                request.setAttribute("MESSAGE", "Add 1item"+name+"success!");
+                request.setAttribute("MESSAGE", "Added 1 item "+ name +" success !!" );
             }
-           
-        }catch(Exception e){
-            e.getMessage();
+            
+        } catch (Exception e) {
+            log("Error at AddController: "+ e.toString());
         }finally{
             request.getRequestDispatcher(url).forward(request, response);
         }

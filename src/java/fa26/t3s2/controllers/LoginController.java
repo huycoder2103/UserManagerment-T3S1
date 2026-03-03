@@ -1,58 +1,53 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-package sample.controllers;
+package fa26.t3s2.controllers;
 
+import fa26.t3s2.users.UserDAO;
+import fa26.t3s2.users.UserDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import sample.user.UserDAO;
-import sample.user.UserDTO;
 
-/**
- *
- * @author ADMIN
- */
-@WebServlet(name = "UpdateController",
-        urlPatterns = {"/UpdateController"})
-public class UpdateController extends HttpServlet {
+@WebServlet(name = "LoginController", urlPatterns = {"/LoginController"})
+public class LoginController extends HttpServlet {
 
-    private static final String ERROR = "SearchController";
-    private static final String SUCCESS = "SearchController";
+    private static final String LOGIN_PAGE = "login.jsp";
+    private static final String USER_PAGE = "user.jsp";
+    private static final String US = "US";
+    private static final String ADMIN_PAGE = "admin.jsp";
+    private static final String AD = "AD";
+    private static final String INCORRECT_MESSAGE = "Incorrect userID or password !";
+    private static final String NOT_SUPPORT_MSG = "Your role is not supported !";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
+        String url = LOGIN_PAGE;
         try {
             String userID = request.getParameter("userID");
-            String fullName = request.getParameter("fullName");
-            String roleID = request.getParameter("roleID");
-            UserDTO user = new UserDTO(userID, "***", roleID, fullName);
+            String password = request.getParameter("password");
             UserDAO dao = new UserDAO();
-            boolean check = dao.update(user);
-            
-            // Lay session hien tai
-            HttpSession session = request.getSession();
-            
-            // Kiem tra userID trong session login hien tai
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
-            
-            // Neu userID login hien tai khop voi userID update thi quay ve trang login
-            if(loginUser.getUserID().equals(userID)){
-                session.setAttribute("LOGIN_USER", user);
-            }
-            if(check){
-                url = SUCCESS;
+            UserDTO loginUser = dao.checkLogin(userID, password);
+            // xac thuc o day
+            if (loginUser != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("LOGIN_USER", loginUser);
+                // phân quyen o day
+                String roleID = loginUser.getRoleID();
+                if (AD.equals(roleID)) {
+                    url = ADMIN_PAGE;
+                } else if (US.equals(roleID)) {
+                    url = USER_PAGE;
+                } else {
+                    request.setAttribute("ERROR_MESSAGE", NOT_SUPPORT_MSG);
+                }
+            } else {
+                request.setAttribute("ERROR_MESSAGE", INCORRECT_MESSAGE);
             }
         } catch (Exception e) {
-            log("Error at UpdateController" + e.toString());
+            log("Error at LoginController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
@@ -64,14 +59,12 @@ public class UpdateController extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     *
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -80,14 +73,12 @@ public class UpdateController extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     *
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 

@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="UserManagementT3S1_JSP" default="default" basedir=".">
-    <description>Builds, tests, and runs the project UserManagementT3S1_JSP.</description>
+<project name="UserManagement_T3S1_JSP-1" default="default" basedir=".">
+    <description>Builds, tests, and runs the project UserManagement_T3S1_JSP-1.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 

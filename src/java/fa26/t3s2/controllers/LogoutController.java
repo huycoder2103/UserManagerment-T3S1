@@ -2,50 +2,40 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package sample.controllers;
+package fa26.t3s2.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import sample.user.UserDAO;
-import sample.user.UserDTO;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author ADMIN
+ * @author hoadoan
  */
-@WebServlet(name = "SearchController",
-        urlPatterns = {"/SearchController"})
-public class SearchController extends HttpServlet {
+@WebServlet(name = "LogoutController", urlPatterns = {"/LogoutController"})
+public class LogoutController extends HttpServlet {
 
-    private static final String ERROR = "admin.jsp";
-    private static final String SUCCESS = "admin.jsp";
-    private static final String NOT_FOUND = "NOT FOUND!";
-    
+    private static final String ERROR="login.jsp";
+    private static final String SUCCESS="login.jsp";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
+        String url= ERROR;
         try {
-            String search = request.getParameter("search");
-            UserDAO dao = new UserDAO();
-            List<UserDTO> listUser = dao.getListUser(search);
-            if(listUser.size() > 0){
-                request.setAttribute("LIST_USER", listUser);
-                url = SUCCESS;
-            } else {
-                request.setAttribute("ERROR_MESSAGE", NOT_FOUND);
+            HttpSession session= request.getSession(false);
+            if(session!= null){
+                session.invalidate();
+                url= SUCCESS;
             }
         } catch (Exception e) {
-            log("Error at SearchController: " + e.toString());
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            log("erro at LogoutController: "+ e.toString());
+        }finally{
+            response.sendRedirect(url);
         }
     }
 
@@ -55,14 +45,12 @@ public class SearchController extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     *
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -71,14 +59,12 @@ public class SearchController extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     *
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 

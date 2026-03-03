@@ -1,6 +1,6 @@
 <%-- 
     Document   : login
-    Created on : Jan 20, 2026, 8:09:56 AM
+    Created on : Jan 19, 2026, 11:14:23 AM
     Author     : ADMIN
 --%>
 
@@ -9,21 +9,24 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login Page</title>
+        <title>Login page</title>
     </head>
     <body>
+        <h1>Hello World!</h1>
+        
         <form action="MainController" method="POST">
-            User ID<input type="text" name="userID" required=""/><br>
-            Password<input type="password" name="password" required=""/><br>
-            <input type="submit" name="action" value="Login"/>
+            User ID: <input type="text" name="userID" required=""/> </br>
+            Password: <input type="password" name="password" required=""/> </br>
+            <input type="submit" name="action" value="Login"/> 
             <input type="reset" value="Reset"/>
         </form>
-        <%
-          String errorMessage = (String) request.getAttribute("ERROR_MESSAGE");
-          if(errorMessage==null) errorMessage="";          
-        %>
-        <%= errorMessage %>
         
+        <%
+            String errorMsg = (String) request.getAttribute("ERROR_MESSAGE");
+            if(errorMsg == null) errorMsg="";
+        %>
+        <%= errorMsg%>
+        <a href="shopping.jsp">PiOn Store</a>
         
     </body>
 </html>

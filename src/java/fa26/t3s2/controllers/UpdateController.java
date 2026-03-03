@@ -1,61 +1,53 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-package sample.controllers;
+package fa26.t3s2.controllers;
 
+import fa26.t3s2.users.UserDAO;
+import fa26.t3s2.users.UserDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import sample.user.UserDAO;
-import sample.user.UserDTO;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "DeleteController",
-        urlPatterns = {"/DeleteController"})
-public class DeleteController extends HttpServlet {
+@WebServlet(name = "UpdateController", urlPatterns = {"/UpdateController"})
+public class UpdateController extends HttpServlet {
 
-    private static final String ERROR = "SearchController";
+    private static final String ERROR = "admin.jsp";
     private static final String SUCCESS = "SearchController";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            // Get userID from request parameter
+            String keyword = request.getParameter("search");
             String userID = request.getParameter("userID");
-            String searchValue = request.getParameter("search");
-            
-            if (searchValue == null) {
-                searchValue = "";
-            }
-            
-            // Init objects UserDAO, UserDTO
+            String fullName = request.getParameter("fullname");
+            String roleID = request.getParameter("roleID");
             UserDAO dao = new UserDAO();
-            UserDTO user = new UserDTO();
-            user.setUserID(userID);
-            
-            // Call delete method in dao
-            boolean check = dao.delete(user);
-            
-            // Return url if delete succesful
+            UserDTO user = new UserDTO(userID, fullName, roleID, "***");
+            boolean check = dao.update(user);
             if (check) {
-//                url = SUCCESS;
-                url = "MainController?action=Search&search=" + searchValue;
+                HttpSession session = request.getSession();
+                UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+                request.setAttribute("keyword", keyword);
+                if (loginUser.getUserID().equals(userID)) {
+                    session.setAttribute("LOGIN_USER", user);
+
+                }
+                url = SUCCESS;
+
             }
+
         } catch (Exception e) {
-            log("Error at DeleteController" + e.toString());
+            log("Error at UpdateController: " + e.toString());
         } finally {
-            // SendRedirect to refresh the page
-            response.sendRedirect(url);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 
@@ -65,14 +57,12 @@ public class DeleteController extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     *
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -81,14 +71,12 @@ public class DeleteController extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     *
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException,
-            IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
