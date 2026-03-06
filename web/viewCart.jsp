@@ -15,9 +15,7 @@
     </head>
     <body>
         <h1>My shopping cart !!</h1>
-        <form action="MainController" method="POST">
-            <input type="submit" name="action" value="CheckOut"/>
-        </form>
+        
         <%
             Cart cart = (Cart) session.getAttribute("CART");
             if (cart != null && cart.getCart().size() > 0) {
@@ -82,7 +80,6 @@
         if (message == null) {
             message = "";
         }
-        // Lấy thông báo lỗi
         String error = (String) request.getAttribute("ERROR");
         if (error == null)
             error = "";
@@ -96,7 +93,9 @@
     <h3><%= error%></h3>
     <% }%>
 
-
+    <form action="MainController" method="POST">
+            <input type="submit" name="action" value="CheckOut"/>
+    </form>
     <a href="MainController?action=Shopping">Mua thêm di!!!</a>
 </body>
 </html>

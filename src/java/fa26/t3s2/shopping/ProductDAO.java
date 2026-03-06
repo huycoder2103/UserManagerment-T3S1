@@ -2,14 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fa26.t3s2.users;
+package fa26.t3s2.shopping;
 
 /**
  *
  * @author jayke
  */
 import fa26.t2s2.utils.DBUtils;
-import fa26.t3s2.shopping.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

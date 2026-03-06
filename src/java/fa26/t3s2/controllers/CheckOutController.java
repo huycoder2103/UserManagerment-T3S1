@@ -5,7 +5,7 @@
 package fa26.t3s2.controllers;
 
 import fa26.t3s2.shopping.Cart;
-import fa26.t3s2.users.OrderDAO;
+import fa26.t3s2.shopping.OrderDAO;
 import fa26.t3s2.users.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,7 +40,7 @@ public class CheckOutController extends HttpServlet {
                     request.setAttribute("ERROR", "Giỏ hàng của bạn đang trống!");
                 } else {
                     // 4. Kiểm tra kho (Giả sử bạn đã viết hàm checkInventory trong ProductDAO)
-                    // Ở đây gọi thẳng bước 5 nếu kho đủ
+                    // gọi thẳng bước 5 nếu kho đủ
                     OrderDAO dao = new OrderDAO();
                     UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
                     boolean check = dao.insertOrder(user.getUserID(), cart);

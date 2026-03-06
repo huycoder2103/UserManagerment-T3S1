@@ -5,8 +5,8 @@
 package fa26.t3s2.controllers;
 
 import fa26.t3s2.shopping.Product;
-import fa26.t3s2.users.ProductDAO;
-import fa26.t3s2.users.ProductDTO;
+import fa26.t3s2.shopping.ProductDAO;
+import fa26.t3s2.shopping.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
