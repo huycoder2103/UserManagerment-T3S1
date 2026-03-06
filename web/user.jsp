@@ -27,6 +27,6 @@
         <form action="MainController" method="POST">
             <input type="submit" name="action" value="Logout"/>
         </form>
-        <a href="shopping.jsp">PiOn Store</a>
+        <a href="MainController?action=Shopping">Đi tới trang mua sắm</a>
     </body>
 </html>

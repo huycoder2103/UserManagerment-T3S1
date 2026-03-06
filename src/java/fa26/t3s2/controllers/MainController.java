@@ -27,8 +27,10 @@ public class MainController extends HttpServlet {
     private static final String VIEW_CART_PAGE = "viewCart.jsp";
     private static final String EDIT = "Edit";
     private static final String EDIT_CONTROLLER = "EditController";
-    private static final String REMOVE="Remove";
-    private static final String REMOVE_CONTROLLER="RemoveController";
+    private static final String REMOVE = "Remove";
+    private static final String REMOVE_CONTROLLER = "RemoveController";
+    private static final String SHOPPING = "Shopping";
+    private static final String LIST_PRODUCT_CONTROLLER = "ListProductController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -44,16 +46,18 @@ public class MainController extends HttpServlet {
                 url = UPDATE_CONTROLLER;
             } else if (DELETE.equals(action)) {
                 url = DELETE_CONTROLLER;
-            }else if (LOGOUT.equals(action)) {
+            } else if (LOGOUT.equals(action)) {
                 url = LOGOUT_CONTROLLER;
-            }else if (ADD.equals(action)) {
+            } else if (ADD.equals(action)) {
                 url = ADD_CONTROLLER;
-            }else if (VIEW.equals(action)) {
+            } else if (VIEW.equals(action)) {
                 url = VIEW_CART_PAGE;
-            }else if (EDIT.equals(action)) {
+            } else if (EDIT.equals(action)) {
                 url = EDIT_CONTROLLER;
-            }else if(REMOVE.equals(action)){
-                url=REMOVE_CONTROLLER;
+            } else if (REMOVE.equals(action)) {
+                url = REMOVE_CONTROLLER;
+            } else if (SHOPPING.equals(action)) {
+                url = LIST_PRODUCT_CONTROLLER;
             }
         } catch (Exception e) {
             log("Error at MainController: " + e.toString());
@@ -62,7 +66,7 @@ public class MainController extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
