@@ -15,6 +15,9 @@
     </head>
     <body>
         <h1>My shopping cart !!</h1>
+        <form action="MainController" method="POST">
+            <input type="submit" name="action" value="CheckOut"/>
+        </form>
         <%
             Cart cart = (Cart) session.getAttribute("CART");
             if (cart != null && cart.getCart().size() > 0) {
@@ -71,6 +74,29 @@
     <%
         }
     %>
-    <a href="shopping.jsp">Mua them di !!!</a>
+
+
+
+    <%
+        String message = (String) request.getAttribute("MESSAGE");
+        if (message == null) {
+            message = "";
+        }
+        // Lấy thông báo lỗi
+        String error = (String) request.getAttribute("ERROR");
+        if (error == null)
+            error = "";
+    %>
+
+    <% if (!message.isEmpty()) {%>
+    <h3><%= message%></h3>
+    <% } %>
+
+    <% if (!error.isEmpty()) {%>
+    <h3><%= error%></h3>
+    <% }%>
+
+
+    <a href="MainController?action=Shopping">Mua thêm di!!!</a>
 </body>
 </html>

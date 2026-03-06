@@ -22,34 +22,40 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "AddController", urlPatterns = {"/AddController"})
 public class AddController extends HttpServlet {
 
-    private static final String ERROR="shopping.jsp";
-    private static final String SUCCESS="shopping.jsp";
+    private static final String SUCCESS = "MainController?action=Shopping";
+    private static final String ERROR = "login.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url= ERROR;
+        String url = ERROR;
         try {
-            String strProduct= request.getParameter("product");
-            String[] arrProduct= strProduct.split("-");
-            String id= arrProduct[0];
-            String name= arrProduct[1];
-            double price= Double.parseDouble(arrProduct[2]);
-            HttpSession session= request.getSession();
-            Cart cart= (Cart) session.getAttribute("CART");
-            if(cart== null){
-                cart= new Cart();
+            // 1. Lấy thông tin sản phẩm từ shopping.jsp
+            String id = request.getParameter("id");
+            String name = request.getParameter("name");
+            double price = Double.parseDouble(request.getParameter("price"));
+            int quantity = Integer.parseInt(request.getParameter("cmbQuantity"));
+
+            // 2. Tạo đối tượng Product
+            Product product = new Product(id, name, price, quantity);
+
+            // 3. Lấy giỏ hàng từ session
+            HttpSession session = request.getSession();
+            Cart cart = (Cart) session.getAttribute("CART");
+            if (cart == null) {
+                cart = new Cart();
             }
-            Product product= new Product(id, name, price, 1);
-            boolean check= cart.add(product);
-            if(check){
-                url= SUCCESS;
+
+            // 4. Thêm vào giỏ hàng và lưu lại vào session
+            boolean check = cart.add(product);
+            if (check) {
                 session.setAttribute("CART", cart);
-                request.setAttribute("MESSAGE", "Added 1 item "+ name +" success !!" );
+                request.setAttribute("MESSAGE", "Đã thêm " + name + " vào giỏ hàng thành công!");
+                url = SUCCESS;
             }
-            
         } catch (Exception e) {
-            log("Error at AddController: "+ e.toString());
-        }finally{
+            log("Error at AddController: " + e.toString());
+        } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }

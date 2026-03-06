@@ -31,6 +31,8 @@ public class MainController extends HttpServlet {
     private static final String REMOVE_CONTROLLER = "RemoveController";
     private static final String SHOPPING = "Shopping";
     private static final String LIST_PRODUCT_CONTROLLER = "ListProductController";
+    private static final String CHECKOUT = "CheckOut";
+    private static final String CHECKOUT_CONTROLLER = "CheckOutController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -58,6 +60,8 @@ public class MainController extends HttpServlet {
                 url = REMOVE_CONTROLLER;
             } else if (SHOPPING.equals(action)) {
                 url = LIST_PRODUCT_CONTROLLER;
+            } else if (CHECKOUT.equals(action)) {
+                url = CHECKOUT_CONTROLLER;
             }
         } catch (Exception e) {
             log("Error at MainController: " + e.toString());

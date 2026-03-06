@@ -4,49 +4,64 @@
  */
 package fa26.t3s2.controllers;
 
-import fa26.t3s2.shopping.Product;
-import fa26.t3s2.users.ProductDAO;
-import fa26.t3s2.users.ProductDTO;
+import fa26.t3s2.shopping.Cart;
+import fa26.t3s2.users.OrderDAO;
+import fa26.t3s2.users.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author jayke
  */
+@WebServlet(name = "CheckOutController", urlPatterns = {"/CheckOutController"})
+public class CheckOutController extends HttpServlet {
 
-@WebServlet(name = "ListProductController", urlPatterns = {"/ListProductController"})
-public class ListProductController extends HttpServlet {
-
-    private static final String SHOPPING_PAGE = "shopping.jsp";
-    private static final String ERROR_PAGE = "login.jsp";
+    private static final String VIEW_CART = "viewCart.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR_PAGE;
+        String url = VIEW_CART;
         try {
-            ProductDAO dao = new ProductDAO();
-            List<Product> listProduct = dao.getAllProduct();
-            
-            if (listProduct != null && !listProduct.isEmpty()) {
-                request.setAttribute("LIST_PRODUCT", listProduct);
-                url = SHOPPING_PAGE;
+            // 2. Kiểm tra session
+            HttpSession session = request.getSession(false);
+            if (session == null || session.getAttribute("LOGIN_USER") == null) {
+                request.setAttribute("ERROR", "Vui lòng đăng nhập trước khi thanh toán!");
+            } else {
+                // 3. Kiểm tra giỏ hàng
+                Cart cart = (Cart) session.getAttribute("CART");
+                if (cart == null || cart.getCart().isEmpty()) {
+                    request.setAttribute("ERROR", "Giỏ hàng của bạn đang trống!");
+                } else {
+                    // 4. Kiểm tra kho (Giả sử bạn đã viết hàm checkInventory trong ProductDAO)
+                    // Ở đây gọi thẳng bước 5 nếu kho đủ
+                    OrderDAO dao = new OrderDAO();
+                    UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+                    boolean check = dao.insertOrder(user.getUserID(), cart);
+
+                    if (check) {
+                        // 6. Xoá giỏ hàng & thông báo
+                        session.removeAttribute("CART");
+                        request.setAttribute("MESSAGE", "Thanh toán thành công!");
+                    } else {
+                        request.setAttribute("ERROR", "Thanh toán thất bại, vui lòng thử lại!");
+                    }
+                }
             }
         } catch (Exception e) {
-            log("Error at ListProductController: " + e.toString());
+            log("Error at CheckOutController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *

@@ -22,8 +22,8 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "EditController", urlPatterns = {"/EditController"})
 public class EditController extends HttpServlet {
 
-    private static final String ERROR = "viewCart.jsp";
     private static final String SUCCESS = "viewCart.jsp";
+    private static final String ERROR = "viewCart.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -31,20 +31,22 @@ public class EditController extends HttpServlet {
         String url = ERROR;
         try {
             String id = request.getParameter("id");
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            int quantity = Integer.parseInt(request.getParameter("quantity")); // Lấy số lượng mới từ viewCart.jsp
 
             HttpSession session = request.getSession();
             Cart cart = (Cart) session.getAttribute("CART");
+
             if (cart != null) {
+                // Gọi đúng tên hàm và tham số: edit(String, int) như trong Cart.java
                 boolean check = cart.edit(id, quantity);
+
                 if (check) {
-                    url = SUCCESS;
                     session.setAttribute("CART", cart);
+                    url = SUCCESS;
                 }
             }
-
         } catch (Exception e) {
-            log("Error at AddController: " + e.toString());
+            log("Error at EditController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

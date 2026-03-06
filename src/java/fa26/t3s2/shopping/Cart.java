@@ -15,6 +15,9 @@ public class Cart {
 
     private Map<String, Product> cart;
 
+    public Cart() {
+    }
+
     public Cart(Map<String, Product> cart) {
         this.cart = cart;
     }
@@ -27,9 +30,7 @@ public class Cart {
         this.cart = cart;
     }
 
-    public Cart() {
-    }
-
+    // Chức năng THÊM: Theo phong cách dùng check và try-catch
     public boolean add(Product product) {
         boolean check = false;
         try {
@@ -43,40 +44,39 @@ public class Cart {
             this.cart.put(product.getId(), product);
             check = true;
         } catch (Exception e) {
+            // Có thể log lỗi ở đây: e.printStackTrace();
         }
         return check;
     }
 
+    // Chức năng SỬA: Theo phong cách dùng check và try-catch
     public boolean edit(String id, int quantity) {
         boolean check = false;
         try {
             if (this.cart != null) {
                 if (this.cart.containsKey(id)) {
+                    // Cập nhật trực tiếp số lượng mới vào sản phẩm trong Map
                     this.cart.get(id).setQuantity(quantity);
                     check = true;
                 }
-
-                
             }
         } catch (Exception e) {
         }
         return check;
     }
 
+    // Chức năng XÓA: Theo phong cách dùng check và try-catch
     public boolean remove(String id) {
         boolean check = false;
         try {
             if (this.cart != null) {
                 if (this.cart.containsKey(id)) {
-
                     this.cart.remove(id);
                     check = true;
                 }
-
             }
         } catch (Exception e) {
         }
         return check;
     }
-
 }

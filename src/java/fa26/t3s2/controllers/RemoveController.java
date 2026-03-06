@@ -21,8 +21,8 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "RemoveController", urlPatterns = {"/RemoveController"})
 public class RemoveController extends HttpServlet {
 
-    private static final String ERROR = "viewCart.jsp";
     private static final String SUCCESS = "viewCart.jsp";
+    private static final String ERROR = "viewCart.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,17 +32,16 @@ public class RemoveController extends HttpServlet {
             String id = request.getParameter("id");
             HttpSession session = request.getSession();
             Cart cart = (Cart) session.getAttribute("CART");
+            
             if (cart != null) {
-
-                boolean check = cart.remove(id);
-                if (check) {
-                    url = SUCCESS;
+                if (cart.getCart().containsKey(id)) {
+                    cart.remove(id); // Gọi hàm remove trong lớp Cart
                     session.setAttribute("CART", cart);
-
+                    url = SUCCESS;
                 }
             }
         } catch (Exception e) {
-            log("Error at DeleteController: " + e.toString());
+            log("Error at RemoveController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
