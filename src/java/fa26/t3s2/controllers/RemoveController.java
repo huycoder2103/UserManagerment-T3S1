@@ -5,7 +5,6 @@
 package fa26.t3s2.controllers;
 
 import fa26.t3s2.shopping.Cart;
-import fa26.t3s2.shopping.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -17,10 +16,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author hoadoan
+ * @author jayke
  */
-@WebServlet(name = "EditController", urlPatterns = {"/EditController"})
-public class EditController extends HttpServlet {
+@WebServlet(name = "RemoveController", urlPatterns = {"/RemoveController"})
+public class RemoveController extends HttpServlet {
 
     private static final String ERROR = "viewCart.jsp";
     private static final String SUCCESS = "viewCart.jsp";
@@ -31,20 +30,19 @@ public class EditController extends HttpServlet {
         String url = ERROR;
         try {
             String id = request.getParameter("id");
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
-
             HttpSession session = request.getSession();
             Cart cart = (Cart) session.getAttribute("CART");
             if (cart != null) {
-                boolean check = cart.edit(id, quantity);
+
+                boolean check = cart.remove(id);
                 if (check) {
                     url = SUCCESS;
                     session.setAttribute("CART", cart);
+
                 }
             }
-
         } catch (Exception e) {
-            log("Error at AddController: " + e.toString());
+            log("Error at DeleteController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

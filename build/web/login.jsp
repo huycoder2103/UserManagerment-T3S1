@@ -26,7 +26,6 @@
             if(errorMsg == null) errorMsg="";
         %>
         <%= errorMsg%>
-        <a href="shopping.jsp">PiOn Store</a>
         
     </body>
 </html>

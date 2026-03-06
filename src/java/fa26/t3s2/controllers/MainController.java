@@ -27,6 +27,8 @@ public class MainController extends HttpServlet {
     private static final String VIEW_CART_PAGE = "viewCart.jsp";
     private static final String EDIT = "Edit";
     private static final String EDIT_CONTROLLER = "EditController";
+    private static final String REMOVE="Remove";
+    private static final String REMOVE_CONTROLLER="RemoveController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -50,6 +52,8 @@ public class MainController extends HttpServlet {
                 url = VIEW_CART_PAGE;
             }else if (EDIT.equals(action)) {
                 url = EDIT_CONTROLLER;
+            }else if(REMOVE.equals(action)){
+                url=REMOVE_CONTROLLER;
             }
         } catch (Exception e) {
             log("Error at MainController: " + e.toString());
