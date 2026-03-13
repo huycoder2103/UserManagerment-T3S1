@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.naming.NamingException;
 
 public class UserDAO {
 
@@ -116,7 +117,7 @@ public class UserDAO {
         return check;
     }
 
-    public boolean deleteUser(String userID) throws SQLException, ClassNotFoundException {
+    public boolean deleteUser(String userID) throws SQLException, ClassNotFoundException, NamingException {
     boolean check = false;
     Connection conn = null;
     PreparedStatement ptm = null;

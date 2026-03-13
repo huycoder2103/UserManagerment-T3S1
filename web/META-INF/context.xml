@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/UserManagement_T3S1_JSP-1"/>
+<Context path="/UserManagement_T3S1_JSP-1">
+    <Resource name="DBCon" 
+              auth="Container" 
+              type="javax.sql.DataSource"
+              driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+              url="jdbc:sqlserver://localhost:1433;databaseName=UserManagement"
+              username="sa" 
+              password="12345" />
+</Context>
